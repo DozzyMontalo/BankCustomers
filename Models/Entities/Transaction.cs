@@ -9,7 +9,7 @@
 
         // Foreign key reference to Wallet
         public required Guid WalletId { get; set; }
-        public required Wallet? Wallet { get; set; }  // Navigation property (nullable)
+        public Wallet? Wallet { get; set; }  // Navigation property (nullable)
 
     }
 }

@@ -32,12 +32,44 @@ namespace BankCustomers.Controllers
                 Email = userDTO.Email,
                 Address = userDTO.Address,
                 Phone = userDTO.Phone
+             
             };
-            
+
             context.Users.Add(user);
+
+            var wallet = new Wallet
+            {
+                Id = Guid.NewGuid(),
+                Address = Guid.NewGuid().ToString(),
+                Balance = 0.0m,
+                UserId = user.Id
+            };
+
+            context.Wallets.Add(wallet);
+
             await context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);  
+            var userDTOToReturn = new UserDTO
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Email = user.Email,
+                Address = user.Address,
+                Phone = user.Phone,
+                Wallets = new List<WalletDTO>
+                {
+                    new WalletDTO
+                    {  
+                        UserId = user.Id,
+                        Address = wallet.Address,
+                        Balance = wallet.Balance
+                    }
+                }
+
+            }; 
+
+
+            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, userDTOToReturn);  
         }
 
         [HttpGet]

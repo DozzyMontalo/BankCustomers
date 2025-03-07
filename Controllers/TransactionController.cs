@@ -9,14 +9,8 @@ namespace BankCustomers.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
-    public class TransactionController  : ControllerBase
+    public class TransactionController(ApplicationDbContext context)  : ControllerBase
     {
-        private readonly ApplicationDbContext context;
-
-        public TransactionController(ApplicationDbContext context)
-        {
-            this.context = context;
-        }
         [HttpPost]
         public async Task<IActionResult> Deposit([FromBody] CreateTransactionDTO transactionDTO)
         {
@@ -36,7 +30,7 @@ namespace BankCustomers.Controllers
             context.Transactions.Add(transaction);
             await context.SaveChangesAsync();
 
-            return Ok(new { Message = "Deposit successful", Balance = Wallet.Balance });
+            return Ok(new { Message = "Deposit successful",  Wallet.Balance });
         }
     }
 }
